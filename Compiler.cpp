@@ -24,34 +24,34 @@ static const string symbol = "().\\";
 static const string whitespace = " \n\t\f\v";
 
 // Constructor
-Compiler::Compiler(unsigned int max_s) : max_steps(max_s), lex_analyzed(false),
-	syn_analyzed(false), expr(), vtab(), stab(), lambda(0) {}
+Compiler::Compiler(unsigned int max_s, bool verbose) : _maxSteps(max_s), _lexAnalyzed(false),
+	_verbose(verbose), _synAnalyzed(false), _expr(), _vTable(), _sTable(), _lambda(0) {}
 
 // Destructor
 Compiler::~Compiler() {
-	if(lambda)
-		delete lambda;
+	if(_lambda)
+		delete _lambda;
 }
 
-// Returns 'lex_analyzed'
-bool Compiler::is_lexed(void) { return lex_analyzed; } 
+// Returns '_lexAnalyzed'
+bool Compiler::is_lexed(void) { return _lexAnalyzed; } 
 
-// Returns 'syn_analyzed'
-bool Compiler::is_syntaxed(void) { return syn_analyzed; } 
+// Returns '_synAnalyzed'
+bool Compiler::is_syntaxed(void) { return _synAnalyzed; } 
 
 // This function gives an input to the compiler. If the compiler already worked with an input
 // then this function resets the compiler's state before assigning the new input
 void Compiler::input(const string &inp) {
-	lex_analyzed = false;
-	syn_analyzed = false;
-	expr = inp;
-	stab.clear();
-	vtab.clear();
-	if(lambda) {
-		delete lambda;
-		lambda = 0;
+	_lexAnalyzed = false;
+	_synAnalyzed = false;
+	_expr = inp;
+	_sTable.clear();
+	_vTable.clear();
+	if(_lambda) {
+		delete _lambda;
+		_lambda = 0;
 	}
-	cout << "Compiler was given the input: " << expr << endl;
+	cout << "Compiler was given the input: " << _expr << endl;
 	return;
 }
 
@@ -60,7 +60,7 @@ void Compiler::input(const string &inp) {
 // The 'vtab' matrix stores the names of the variables found in the input expression in alphabetic order.
 void Compiler::lexical_analysis(void)
 {
-	if(lex_analyzed) {
+	if(_lexAnalyzed) {
 		cerr << "Input expression was already lexically analyzed" << endl;
 		return;
 	}
@@ -68,22 +68,22 @@ void Compiler::lexical_analysis(void)
 	const string checkstr = alphabetic + symbol + whitespace;
 
 	// Check the lambda term for illegal symbols
-	size_t res = expr.find_first_not_of(checkstr);
+	size_t res = _expr.find_first_not_of(checkstr);
 	if(res != string::npos) {
-		cerr << "Lexical analysis: Symbol \'" << expr[res] << "\' is not allowed" << endl;
-		lex_analyzed = false;
+		cerr << "Lexical analysis: Symbol \'" << _expr[res] << "\' is not allowed" << endl;
+		_lexAnalyzed = false;
 		return;
 	}
 	else { // Find the lexical tokens of the input expression 'expr' given.
 		Symbol token;
-		const size_t inp_size = expr.size();
+		const size_t inp_size = _expr.size();
 		size_t p = 0;
 		while(p < inp_size) {
-			p = expr.find_first_not_of(whitespace, p);// Ignore whitespaces
+			p = _expr.find_first_not_of(whitespace, p);// Ignore whitespaces
 			if(p == string::npos) 
 				break; // End of input reached
 			else {
-				switch(expr[p]) {
+				switch(_expr[p]) {
 				case '(':
 					token.type = LEFT_PAR;
 					token.name = "(";
@@ -107,28 +107,30 @@ void Compiler::lexical_analysis(void)
 				default:
 					// Lexical token corresponds to a variable
 					token.type = VARIABLE;
-					size_t q = expr.find_first_not_of(alphabetic, p);
+					size_t q = _expr.find_first_not_of(alphabetic, p);
 					if(q == string::npos)
-						token.name = expr.substr(p);
+						token.name = _expr.substr(p);
 					else
-						token.name = expr.substr(p, q - p);
-					vtab.insert(token.name);
+						token.name = _expr.substr(p, q - p);
+					_vTable.insert(token.name);
 					p = q;
 					break;
 				}
 			} // end else
-			stab.insert(token); // This line gets executed in all cases but whitespaces and end of input
+			_sTable.insert(token); // This line gets executed in all cases but whitespaces and end of input
 		}// end while
 	}
-	lex_analyzed = true;
+	_lexAnalyzed = true;
 	return;
 }
 
+
+// This function reduces the expression to it's normal form
 void Compiler::find_normal(void) {
-	if(!syn_analyzed) {
+	if(!_synAnalyzed) {
 		cerr << "Input expression is not syntactically analyzed yet" << endl;
 		return;
 	}
-	lambda->normalize(max_steps, vtab);
+	_lambda->normalize(_maxSteps, _vTable, _verbose);
 	return;
 }

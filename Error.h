@@ -13,14 +13,15 @@
 #define _LCC_ERROR_
 
 #include <iostream>
+#include <exception>
 
 // Exception class denoting "an error has happened".
 // Used in try-catch blocks.
-class Error {
-	const char* const message;
+class Error : public std::exception {
+	const char* const _msg;
 public:
-	Error(const char* const msg = 0) : message(msg) {}
-	void print() {std::cerr << "Error"; if(message) std::cerr << ": " << message << std::endl;}
+	Error(const char* const msg = 0);
+	const char *what() const noexcept;
 };
 
 #endif // #ifndef _LCC_ERROR_

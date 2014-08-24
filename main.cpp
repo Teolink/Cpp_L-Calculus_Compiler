@@ -14,44 +14,57 @@
 #include <fstream>
 #include <string>
 #include <stdexcept>
+#include <cstdlib>
 
 using namespace std;
 
-int main(void) try
+int main(int argc, char* argv[]) try
 {
-	Compiler compiler(200);
+	Compiler compiler(200, true);
 
+        if(argc > 2) {
+            cerr << "Too many arguments given" << endl;
+            return EXIT_FAILURE;
+        }
+       
 	// Input stage
-	string fname = "input_lambda.txt", expr;
-	ifstream fs(fname.c_str(), ios_base::in);
-	if(!fs.is_open()) {
-		cerr << "File " << fname << " could not be opened" << endl;
-		cerr << "Make sure that the file exists" << endl;
-		cerr << "Aborting program" << endl;
-		return 1;
-	}
-	if(fs.bad()) {
-		cerr << "There was a critical error with the opening of file: " << fname << endl;
-		cerr << "Aborting program" << endl;
-		return 1;
-	}
 	string line;
-	while(getline(fs, line))
+        string expr;
+        if(argc == 2) { // Input file name is given
+            string fname = argv[1];
+            ifstream fs(fname.c_str(), ios_base::in);
+            if(!fs.is_open()) {
+                    cerr << "File " << fname << " could not be opened" << endl;
+                    cerr << "Make sure that the file exists" << endl;
+                    cerr << "Aborting program" << endl;
+                    return EXIT_FAILURE;
+            }
+            if(fs.bad()) {
+                    cerr << "There was a critical error with the opening of file: " << fname << endl;
+                    cerr << "Aborting program" << endl;
+                    return EXIT_FAILURE;
+            }
+            while(getline(fs, line))
 		expr += line;
+        }
+        else {
+            cout << "Provide the input lambda expression" << endl << "expr: ";
+            getline(cin, expr);
+        }
 	compiler.input(expr);
 
 	// Lexical Analysis
 	compiler.lexical_analysis();
 	if(!compiler.is_lexed()) {
 		cerr << "Main: There are lexical errors in the input lambda term" << endl;
-		return 1;
+		return EXIT_FAILURE;
 	}
 
 	// Syntax Analysis
 	compiler.syntax_analysis();
 	if(!compiler.is_syntaxed()) {
 		cerr << "Main: There are syntax errors in the input lambda term" << endl;
-		return 1;
+		return EXIT_FAILURE;
 	}
 
 	// Find normal form
@@ -61,9 +74,9 @@ int main(void) try
 	cout << "Press enter to quit program" << endl;
 	string dummy;
 	getline(cin,dummy);
-	return 0;
+	return EXIT_SUCCESS;
 }
 catch(exception exc) {
 	cerr << exc.what() << endl;
-	return 1;
+	return EXIT_FAILURE;
 }

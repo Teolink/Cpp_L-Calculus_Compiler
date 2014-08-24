@@ -55,12 +55,14 @@ public:
 	// This function proceeds a step in the normalization of the lambda term.
 	// The step is made on the lambda term with the lambda symbol to the 
 	// leftmost of the expression
+        // Returns "true" if the term can be further reduced, otherwise it returns "false"
 	bool reduce(V_Table &vtab);
 
 	// This function finds the normal form of the given lambda term (provided it exists)
 	// using the normal series deduction strategy
 	// If the reduction steps exceed 'max_steps', the normalization stops as a safety measure
-	void normalize(unsigned int max_steps, V_Table &vtab);
+        // Enable 'verbose' to print each step in the procedure
+	void normalize(unsigned int max_steps, V_Table &vtab, bool verbose);
 
 	// overloading operator << of ostream to print lambda terms
 	friend std::ostream& operator<<(std::ostream& os, const Lambda& lambda);

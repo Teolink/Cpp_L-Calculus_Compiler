@@ -35,7 +35,7 @@ typedef std::list<Symbol> S_Storage_t;
 
 class S_Table { // The class of a table of lexical symbols
 private:
-	S_Storage_t elem;
+	S_Storage_t _elem;
 public:
 	void clear(void); // Clears the table's contents
 	const S_Storage_t::const_iterator cbegin(void) const; // Returns an iterator to the start of the table	

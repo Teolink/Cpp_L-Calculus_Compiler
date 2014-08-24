@@ -18,7 +18,7 @@
 
 class V_Table { // The class of a table of variables
 private:
-	std::list<std::string> elem;
+	std::list<std::string> _elem;
 public:	
 	V_Table(); // Constructor
 	void clear(); // Clears the table's contents

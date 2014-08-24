@@ -20,42 +20,42 @@ using namespace std;
 V_Table::V_Table() {} // Constructor
 
 // Clears the table's contents
-void V_Table::clear() {elem.clear();}
+void V_Table::clear() {_elem.clear();}
 
 // Returns an iterator to the start of the table	
-const list<string>::iterator V_Table::begin(void) { return elem.begin(); }
+const list<string>::iterator V_Table::begin(void) { return _elem.begin(); }
 
 // Returns an iterator to the end of the table
-const list<string>::iterator V_Table::end(void) { return elem.end(); }
+const list<string>::iterator V_Table::end(void) { return _elem.end(); }
 
 // Returns an iterator to the start of the const table	
-const list<string>::const_iterator V_Table::cbegin(void) const { return elem.cbegin(); }
+const list<string>::const_iterator V_Table::cbegin(void) const { return _elem.cbegin(); }
 
 // Returns an iterator to the end of the const table
-const list<string>::const_iterator V_Table::cend(void) const { return elem.cend(); }
+const list<string>::const_iterator V_Table::cend(void) const { return _elem.cend(); }
 
 // Returns 'true' if 'str' exists in the table, otherwise it returns 'falese'
 bool V_Table::exists(const string &str) const {
-	return (find(elem.begin(), elem.end(), str) != elem.end());
+	return (find(_elem.begin(), _elem.end(), str) != _elem.end());
 }
 
 // Performs a sorted insert provided 'str' does not already exist in the table
 void V_Table::insert(const string &str) {
-	list<string>::iterator place = lower_bound(elem.begin(), elem.end(), str);
-	if((place == elem.end()) || (*place != str))
-		elem.insert(place, str);
+	list<string>::iterator place = lower_bound(_elem.begin(), _elem.end(), str);
+	if((place == _elem.end()) || (*place != str))
+		_elem.insert(place, str);
 }
 
 // Removes 'str' from table
-void V_Table::remove(const std::string &str) { elem.remove(str); }
+void V_Table::remove(const std::string &str) { _elem.remove(str); }
 
 // Performs set union between the object's element table with 'table'
 void V_Table::unite(const V_Table &table) {
 
 	// Perform set union on the two tables. The result will be stored in 'elem'
-	list<string>::iterator i = elem.begin();
+	list<string>::iterator i = _elem.begin();
 	list<string>::const_iterator j = table.cbegin();
-	while(i != elem.end() && j != table.cend()) {
+	while(i != _elem.end() && j != table.cend()) {
 		if(*i < *j)
 			++i;
 		else if(*i == *j) {
@@ -63,13 +63,13 @@ void V_Table::unite(const V_Table &table) {
 			++j;
 		}
 		else {
-			elem.insert(i, *j++);
+			_elem.insert(i, *j++);
 		}
 	} // end while
 
 	// Append the remaining elements of table (which are greater than all elements of 'elem')
 	while(j != table.cend()) 
-		elem.push_back(*j++);
+		_elem.push_back(*j++);
 }
 
 // Produce a new variable not already at the table

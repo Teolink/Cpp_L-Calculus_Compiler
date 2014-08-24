@@ -16,16 +16,16 @@
 using namespace std;
 
 // Clears the table's contents
-void S_Table::clear(void) { elem.clear(); }
+void S_Table::clear(void) { _elem.clear(); }
 
 // Returns an iterator to the start of the table	
-const S_Storage_t::const_iterator S_Table::cbegin(void) const {return elem.cbegin(); } 
+const S_Storage_t::const_iterator S_Table::cbegin(void) const {return _elem.cbegin(); } 
 
 // Returns an iterator to the end of the table
-const S_Storage_t::const_iterator S_Table::cend(void) const {return elem.cend(); } 
+const S_Storage_t::const_iterator S_Table::cend(void) const {return _elem.cend(); } 
 
 // Insert 'sym' at the end of the symbol table
-void S_Table::insert(const Symbol &sym) { elem.push_back(sym); }
+void S_Table::insert(const Symbol &sym) { _elem.push_back(sym); }
 
 void S_Table::print(const S_Storage_t::const_iterator start, const S_Storage_t::const_iterator end) const {
 	bool prev_var = false; // true if the previous symbol that was printed was a variable

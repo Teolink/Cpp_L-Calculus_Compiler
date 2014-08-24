@@ -204,6 +204,7 @@ ostream& operator<<(ostream& os, const Lambda& lambda) {
 // This function proceeds a step in the normalization of the lambda term.
 // The step is made on the lambda term with the lambda symbol to the 
 // leftmost of the expression
+// Returns "true" if the term can be further reduced, otherwise it returns "false"
 bool Lambda::reduce(V_Table &vtab) {
 	switch(type) {
 	case VAR:
@@ -223,14 +224,21 @@ bool Lambda::reduce(V_Table &vtab) {
 
 // This function finds the normal form of the given lambda term (provided it exists)
 // using the normal series deduction strategy
-void Lambda::normalize(unsigned int max_steps, V_Table &vtab) {
+void Lambda::normalize(unsigned int max_steps, V_Table &vtab, bool verbose = false) {
 	unsigned int counter = 0;
-	cout << "Initial: " << *this << endl;
-	while(reduce(vtab) && (counter < max_steps)) 
-		cout << "Step " << (++counter) << ": " << *this << endl;
-	if(counter == max_steps)
-		cout << "Normalization effort stopped after " << max_steps << " steps" << endl;
-	else
-		cout << "Input term normalized after " << counter << " steps" << endl;
-	cout << "The result is: " << *this << endl;
+        if(verbose) {
+            cout << "Initial: " << *this << endl;
+            while(reduce(vtab) && (counter < max_steps)) 
+                    cout << "Step " << (++counter) << ": " << *this << endl;
+            if(counter == max_steps)
+                    cout << "Normalization effort stopped after " << max_steps << " steps" << endl;
+            else
+                    cout << "Input term normalized after " << counter << " steps" << endl;
+            cout << "The result is: " << *this << endl;
+        }
+        else {
+            while(reduce(vtab))
+                ;
+            cout << *this << endl;
+        }
 }

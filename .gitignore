@@ -213,3 +213,16 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+/L-Calculus Compiler/nbproject/Makefile-variables.mk
+/L-Calculus Compiler/nbproject/configurations.xml
+/L-Calculus Compiler/nbproject/private/launcher.properties
+/L-Calculus Compiler/nbproject/Package-Release.bash
+/L-Calculus Compiler/nbproject/Makefile-impl.mk
+/L-Calculus Compiler/nbproject/Makefile-Release.mk
+/L-Calculus Compiler/nbproject/Package-Debug.bash
+/L-Calculus Compiler/nbproject/private/Makefile-variables.mk
+/L-Calculus Compiler/nbproject/project.xml
+/L-Calculus Compiler/nbproject/private/configurations.xml
+/L-Calculus Compiler/nbproject/Makefile-Debug.mk
+/L-Calculus Compiler/nbproject/private/private.xml
+/L-Calculus Compiler/Makefile
